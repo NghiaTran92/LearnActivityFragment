@@ -69,7 +69,7 @@ public class SecondFragment extends Fragment   {
         Log.i("SecondFragment", "requestCode=" + requestCode + "--resultCode=" + resultCode);
         if(requestCode==mPhotoAction){
             if(resultCode==Activity.RESULT_OK){
-
+                Log.i("SecondFragment", "onActivityResult RESULT_OK");
                 try {
                     Uri selectedImage = data.getData();
                     InputStream imageStream = null;
@@ -85,9 +85,10 @@ public class SecondFragment extends Fragment   {
 
             }else if(resultCode==Activity.RESULT_CANCELED){
                 // 0: firstFragment
-                if (mMainActivity!=null && mMainActivity.getCurrentPosition()!=0){
-                    mMainActivity.setPositionFragment(0);
-                }
+//                if (mMainActivity!=null && mMainActivity.getCurrentPosition()!=0){
+//                    mMainActivity.setPositionFragment(0);
+//                }
+                Log.i("SecondFragment", "onActivityResult RESULT_CANCELED");
             }
         }
     }

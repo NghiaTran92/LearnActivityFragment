@@ -18,12 +18,12 @@
             </intent-filter>
         </activity>
         <!--other activity-->
-        <activity
-            android:name=".SubActivity"
-            android:launchMode="standard"
-            >
+        <!--<activity-->
+            <!--android:name=".SubActivity"-->
+            <!--android:launchMode="standard"-->
+            <!-->-->
 
-        </activity>
+        <!--</activity>-->
     </application>
 
 </manifest>

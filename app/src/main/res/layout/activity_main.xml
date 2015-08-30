@@ -20,8 +20,8 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_other_activity"
-            android:text="@string/other_activity"
+            android:id="@+id/btn_1"
+            android:text="@string/button_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
