@@ -1,21 +1,39 @@
 package com.example.framgiatranthanhnghia.learnactivityfragment;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 
 import com.example.framgiatranthanhnghia.learnactivityfragment.adapter.ViewPagerAdapter;
+import com.example.framgiatranthanhnghia.learnactivityfragment.fragment.FirstFragment;
+import com.example.framgiatranthanhnghia.learnactivityfragment.fragment.SecondFragment;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
 
+    private final String TAG = "MainActivity";
+    private final int mPhotoAction = 10;
+
     private ViewPager mViewPager;
     private ViewPagerAdapter mAdapter;
+    private List<Fragment> mListFragment;
+    private GestureDetector tapGestureDetector;
 
 
     @Override
@@ -24,22 +42,24 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         Log.i("MainActivity", "onCreate");
 
-        mViewPager=(ViewPager)findViewById(R.id.view_pager);
-        mAdapter=new ViewPagerAdapter(getSupportFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        mListFragment = new ArrayList<>();
+        mListFragment.add(new FirstFragment());
+        mListFragment.add(new SecondFragment());
+
+        mAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mListFragment);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setOffscreenPageLimit(2);
 
+        tapGestureDetector = new GestureDetector(this, new TapGestureListener());
+        mViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                tapGestureDetector.onTouchEvent(motionEvent);
+                return false;
+            }
+        });
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        String data=getIntent().getStringExtra(SubActivity.EXTRA_NAME);
-        if(data==null){
-            data="";
-        }
-        Log.i("MainActivity", "onStart -- data="+data);
     }
 
     @Override
@@ -48,6 +68,7 @@ public class MainActivity extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -64,24 +85,52 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    public void setPositionFragment(int positionFragment){
-//        mViewPager.setCurrentItem(positionFragment);
-//    }
-//
-//    public int getCurrentPosition(){
-//        return mViewPager.getCurrentItem();
-//    }
 
-//    public void callChooseFragmentFromSecondFrag(){
-//        Intent i=new Intent(Intent.ACTION_PICK);
-//        i.setType("image/*");
-//        startActivityForResult(i,mPhotoAction);
-//    }
-//
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i("MainActivity", "requestCode="+requestCode+"--resultCode="+resultCode);
-
+        Log.i("MainActivity", "requestCode=" + requestCode + "--resultCode=" + resultCode);
+        if (requestCode == mPhotoAction) {
+            if (resultCode == Activity.RESULT_OK) {
+                Log.i(TAG, "onActivityResult RESULT_OK");
+                Uri selectedImage = data.getData();
+                SecondFragment secondFragment=(SecondFragment) mListFragment.get(1); // 1: second fragment
+                if(secondFragment!=null){
+                    secondFragment.loadImageFrom(selectedImage);
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.i(TAG, "onActivityResult RESULT_CANCELED");
+                // 0: first fragment
+                mViewPager.setCurrentItem(0);
+            }
+        }
     }
+
+
+    public class TapGestureListener extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            // Your Code here
+
+            Fragment fragment = null;
+            for (int i = 0; i < mListFragment.size(); i++) {
+                fragment = mListFragment.get(i);
+                // check fragment
+                //  isVisible() not working
+                if (fragment.isMenuVisible()) {
+                    Log.i("Check Fragemt", "position=" + i + "-- isMenuVisible");
+                    // 1: second fragment
+                    if (i == 1) {
+                        Intent intent = new Intent(Intent.ACTION_PICK);
+                        intent.setType("image/*");
+                        startActivityForResult(intent, mPhotoAction);
+                    }
+                }
+            }
+            return true;
+        }
+    }
+
+
 }

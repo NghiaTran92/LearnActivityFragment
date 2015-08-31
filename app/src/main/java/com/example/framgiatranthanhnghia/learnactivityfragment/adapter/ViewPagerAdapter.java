@@ -17,11 +17,10 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     private List<Fragment> mListFragment;
 
-    public ViewPagerAdapter(FragmentManager fm) {
+    public ViewPagerAdapter(FragmentManager fm,List<Fragment> list) {
         super(fm);
-        mListFragment=new ArrayList<>();
-        mListFragment.add(new FirstFragment());
-        mListFragment.add(new SecondFragment());
+        mListFragment=list;
+
     }
 
     @Override
