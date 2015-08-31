@@ -50,7 +50,11 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i("MainActivity", "onStart");
+        String data=getIntent().getStringExtra(SubActivity.EXTRA_NAME);
+        if(data==null){
+            data="";
+        }
+        Log.i("MainActivity", "onStart -- data="+data);
     }
 
     @Override
