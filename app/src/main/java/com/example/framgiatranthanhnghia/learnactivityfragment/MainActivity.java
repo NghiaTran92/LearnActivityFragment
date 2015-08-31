@@ -1,17 +1,14 @@
 package com.example.framgiatranthanhnghia.learnactivityfragment;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.framgiatranthanhnghia.learnactivityfragment.adapter.ViewPagerAdapter;
 
@@ -19,7 +16,7 @@ public class MainActivity extends ActionBarActivity {
 
     private ViewPager mViewPager;
     private ViewPagerAdapter mAdapter;
-    private Button mBtnCallSubActivity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,23 +24,11 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         Log.i("MainActivity", "onCreate");
 
-        String data=getIntent().getStringExtra(SubActivity.EXTRA_NAME);
-        if(data!=null){
-            Toast.makeText(this,data,Toast.LENGTH_LONG).show();
-        }
-
-
         mViewPager=(ViewPager)findViewById(R.id.view_pager);
         mAdapter=new ViewPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mAdapter);
-        mBtnCallSubActivity=(Button)findViewById(R.id.btn_other_activity);
-        mBtnCallSubActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i=new Intent(MainActivity.this,SubActivity.class);
-                startActivity(i);
-            }
-        });
+        mViewPager.setOffscreenPageLimit(2);
+
 
     }
 
@@ -79,13 +64,13 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void setPositionFragment(int positionFragment){
-        mViewPager.setCurrentItem(positionFragment);
-    }
-
-    public int getCurrentPosition(){
-        return mViewPager.getCurrentItem();
-    }
+//    public void setPositionFragment(int positionFragment){
+//        mViewPager.setCurrentItem(positionFragment);
+//    }
+//
+//    public int getCurrentPosition(){
+//        return mViewPager.getCurrentItem();
+//    }
 
 //    public void callChooseFragmentFromSecondFrag(){
 //        Intent i=new Intent(Intent.ACTION_PICK);
