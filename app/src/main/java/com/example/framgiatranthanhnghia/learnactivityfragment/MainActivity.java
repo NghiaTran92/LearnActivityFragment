@@ -117,8 +117,8 @@ public class MainActivity extends ActionBarActivity {
             for (int i = 0; i < mListFragment.size(); i++) {
                 fragment = mListFragment.get(i);
                 // check fragment
-                //  isVisible() not working
-                if (fragment.isMenuVisible()) {
+                //  isVisible() return true both FirstFragment and SecondFragment
+                if (fragment.isMenuVisible()) { // isMenuVisible: check fragment clicked
                     Log.i("Check Fragemt", "position=" + i + "-- isMenuVisible");
                     // 1: second fragment
                     if (i == 1) {
